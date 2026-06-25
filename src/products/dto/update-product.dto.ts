@@ -1,7 +1,17 @@
-import { IsString } from "class-validator";
+import { IsInt, isNotEmpty, IsNotEmpty, IsOptional, IsPositive, IsString, Length, Min } from "class-validator";
 
 export class UpdateProductDto {
-    // optional parameter
-    name?: string;
-    price?: string;
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+
+    @IsString()
+    @IsNotEmpty()
+    description: string;
+
+    @IsInt()
+    @IsNotEmpty()
+    @IsPositive() // or @Min(0,{message:"price must be greater than 0"})
+    price: number;
 }
