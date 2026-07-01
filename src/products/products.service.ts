@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Repository } from 'typeorm';
-import { ProductEntity } from './product.entity';
+import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 
@@ -13,13 +13,8 @@ export class ProductsService {
 
 
     constructor(
-        @InjectRepository(ProductEntity)
-        private readonly productsRepository: Repository<ProductEntity>) { }
-
-
-
-
-
+        @InjectRepository(Product)
+        private readonly productsRepository: Repository<Product>) { }
 
     async createNewProduct(createPorductDto: CreateProductDto) {
         // must convert fist the dto to product entity by this line first 

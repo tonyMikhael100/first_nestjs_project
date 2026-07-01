@@ -16,6 +16,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { UserService } from 'src/users/user.service';
+import { ConfigService } from '@nestjs/config';
 
 
 
@@ -28,7 +29,12 @@ export class ProductsController {
     // }
 
     //or 
-    constructor(private readonly productService: ProductsService, private readonly userService: UserService) { }
+    constructor(
+        private readonly productService: ProductsService,
+        private readonly userService: UserService,
+        private readonly configService: ConfigService,
+
+    ) { }
 
     @Post()
     createNewProduct(@Body() body: CreateProductDto) {

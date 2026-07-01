@@ -8,22 +8,35 @@ import { UserModule } from "./users/user.module";
 import { ProductsModule } from './products/products.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductEntity } from './products/product.entity';
+import { Product } from './products/product.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from './users/user.entity';
+import { Review } from './reviews/reviews.entity';
+
+const envFile = '.env.' + (process.env.NODE_ENV ? process.env.NODE_ENV : 'development');
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: envFile,
+      isGlobal: true,
+    }),
     CategoriesModule,
     UserModule,
     ProductsModule,
     ReviewsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      username: 'mac',
-      password: '123456',
-      host: 'localhost',
-      synchronize: true, // only in dev be true 
-      database: 'first_project',
-      entities: [ProductEntity],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        host: configService.get('DB_HOST'),
+        database: configService.get('DB_NAME'),
+        synchronize: process.env.ge !== 'production',
+        entities: [Product, User, Review],
+      }),
     }),
   ],
   controllers: [AppController],
