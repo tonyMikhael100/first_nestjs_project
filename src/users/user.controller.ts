@@ -4,6 +4,8 @@ import { ReviewsService } from "src/reviews/reviews.service";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { LoginUserDto } from "./dtos/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
+import { CurrentUser } from "./decorator/curretn-user.decorator";
+import { JwtPayloadType } from "./jwt-payload.type";
 
 
 @Controller('/api/users')
@@ -24,8 +26,14 @@ export class UserController {
 
     @Get('/current-user')
     @UseGuards(AuthGuard)
-    async getCurrentUser(@Req() req: any) {
-        return await this.userService.getCurrentUser((req as any).userPayload)
+    async getCurrentUser(@CurrentUser() userPayload) {
+        return await this.userService.getCurrentUser(userPayload)
+    }
+
+
+    @Get()
+    async getAllUsersForAdmin() {
+        return await this.userService.getAllUsers();
     }
 
 }
