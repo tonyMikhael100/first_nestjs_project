@@ -6,6 +6,9 @@ import { LoginUserDto } from "./dtos/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "./decorator/curretn-user.decorator";
 import { JwtPayloadType } from "./jwt-payload.type";
+import { Roles } from "./decorator/roles.decorator";
+import { UserType } from "./user-role.enum";
+import { AuthRolesGuard } from "./guards/auth-roles.guard";
 
 
 @Controller('/api/users')
@@ -32,6 +35,8 @@ export class UserController {
 
 
     @Get()
+    @Roles(UserType.Admin)
+    @UseGuards(AuthRolesGuard)
     async getAllUsersForAdmin() {
         return await this.userService.getAllUsers();
     }

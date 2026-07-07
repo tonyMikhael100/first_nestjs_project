@@ -9,6 +9,8 @@ import { LoginUserDto } from "./dtos/login-user.dto";
 import { JwtPayloadType } from "./jwt-payload.type";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { UpdateUserDto } from "./dtos/update-user.dto";
+import { UserType } from "./user-role.enum";
 
 
 
@@ -91,6 +93,25 @@ export class UserService {
      */
     async getAllUsers(): Promise<User[]> {
         return await this.userRepo.find();
+    }
+
+
+
+
+    async updateUserInformation(updateUserDto: UpdateUserDto) {
+
+        const { password, userType } = updateUserDto;
+
+        const user
+
+        if (userType) {
+
+await this.userRepo.
+        }
+
+
+
+
     }
 
 }
