@@ -1,5 +1,5 @@
 import { CategoriesModule } from './categories/categories.module';
-import { Module } from "@nestjs/common";
+import { ClassSerializerInterceptor, Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UserController } from "./users/user.controller";
@@ -12,6 +12,7 @@ import { Product } from './products/product.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './users/user.entity';
 import { Review } from './reviews/reviews.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 const envFile = '.env.' + (process.env.NODE_ENV ? process.env.NODE_ENV : 'development');
 
@@ -40,6 +41,11 @@ const envFile = '.env.' + (process.env.NODE_ENV ? process.env.NODE_ENV : 'develo
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    }
+  ],
 })
 export class AppModule { }

@@ -3,6 +3,7 @@ import { TIME_STAMP } from "src/utils/constants";
 import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserType } from "./user-role.enum";
 import { Review } from "src/reviews/reviews.entity";
+import { Exclude } from "class-transformer";
 
 @Entity({ name: 'users' })
 export class User {
@@ -17,6 +18,7 @@ export class User {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column({ default: false })

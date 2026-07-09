@@ -1,4 +1,4 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { ReviewsService } from "src/reviews/reviews.service";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -98,20 +98,52 @@ export class UserService {
 
 
 
-    async updateUserInformation(updateUserDto: UpdateUserDto) {
-
+    async updateUserInformation(
+        userId: number,
+        updateUserDto: UpdateUserDto,
+    ) {
         const { password, userType } = updateUserDto;
 
-        const user
+        const user = await this.userRepo.findOneBy({ id: userId });
 
-        if (userType) {
-
-await this.userRepo.
+        if (!user) {
+            throw new NotFoundException(
+                'No user with this id',
+            );
         }
 
+        if (userType) {
+            user.userType = userType;
+        }
 
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
 
+            const hashedPassword = await bcrypt.hash(
+                password,
+                salt,
+            );
 
+            user.password = hashedPassword;
+        }
+
+        await this.userRepo.save(user);
+
+        return {
+            success: true,
+            message: 'User updated successfully',
+            data: user,
+        };
     }
 
+    async deleteUser(userId: number) {
+        const user = await this.userRepo.findOneBy({ id: userId });
+
+        if (!user) {
+            throw new NotFoundException('No user with this id');
+        }
+
+        await this.userRepo.remove(user);
+        return { success: true, message: 'User deleted successfully' };
+    }
 }
