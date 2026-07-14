@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Review } from "src/reviews/reviews.entity";
 import { User } from "src/users/user.entity";
 import { TIME_STAMP } from "src/utils/constants";
@@ -14,8 +15,10 @@ export class Product {
     description: string;
     @Column({ type: "float" })
     price: number;
+
     @CreateDateColumn({ type: 'timestamp', default: () => TIME_STAMP })
     createdAt: Date;
+
     @UpdateDateColumn({ type: 'timestamp', default: () => TIME_STAMP })
     updatedAt: Date;
 

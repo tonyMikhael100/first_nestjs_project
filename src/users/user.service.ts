@@ -41,6 +41,8 @@ export class UserService {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+
+        // must convert the data to enity by using create method 
         const newUser = this.userRepo.create({
             userName,
             email,
