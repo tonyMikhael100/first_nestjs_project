@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Product } from "src/products/product.entity";
 import { User } from "src/users/user.entity";
 import { TIME_STAMP } from "src/utils/constants";
@@ -21,6 +22,7 @@ export class Review {
     updatedAt: Date;
     @ManyToOne(() => Product, (product) => product.reviews)
     product: Product;
+
     @ManyToOne(() => User, (user) => user.reviews)
     user: User;
 }
